@@ -43,9 +43,9 @@ class Game extends React.Component {
     setTimeout(() => {
       this.setState(prevState => {
         let shopProps = Object.assign({}, prevState[shopKey]);
-        let currentMoneyEarned = this.state.totalMoneyEarned;
-        let newMoneyEarned = currentMoneyEarned + ((shopProps.moneyEarnedWithClick * shopProps.numberOfShops) * this.state.monetaryModifier);
-        return { totalMoneyEarned: newMoneyEarned }
+        return ({
+          totalMoneyEarned: prevState.totalMoneyEarned + ((shopProps.moneyEarnedWithClick * shopProps.numberOfShops) * this.state.monetaryModifier)
+        });
       })
     }, this.state[shopKey].buyTime)
   }
@@ -57,7 +57,7 @@ class Game extends React.Component {
       let buyAmount = this.devShopBuyAmount(shopKey);
       shopProps.numberOfShops++;
       newState[shopKey] = shopProps;
-      newState['totalMoneyEarned'] = this.state.totalMoneyEarned - buyAmount
+      newState['totalMoneyEarned'] = prevState.totalMoneyEarned - buyAmount
       return newState;
     });
   }
