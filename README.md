@@ -1,3 +1,7 @@
+#JS Clicker Game
+This is a clicker game that I'm using to teach myself React.
+Start dev shops to make money and be the richest developer ever. Have fun!
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
