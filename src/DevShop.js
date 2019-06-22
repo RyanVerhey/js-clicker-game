@@ -4,7 +4,7 @@ import './DevShop.css';
 function DevShop(props) {
   return (
     <div className="DevShop">
-      {props.title}
+      {props.name}
     </div>
   );
 }
