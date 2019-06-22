@@ -10,7 +10,7 @@ function DevShop(props) {
         className="DevShop-earn-button"
         onClick={props.onEarnClick}
       >
-        Earn ${props.moneyEarned * props.numberOfShops}! ({props.buyTime / 1000} seconds)
+        Earn ${props.moneyEarnedWithClick}! ({props.buyTime} seconds)
       </button><br />
       <button
         className="DevShop-buy-button"
