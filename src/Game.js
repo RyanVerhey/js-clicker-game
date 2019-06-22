@@ -22,6 +22,8 @@ class Game extends React.Component {
       buyIncreaseModifier: 1.1,
       // Cooldown timer in MS before buying abother shop
       buyTime: 500,
+      // Determines if it's the initial shop
+      initial: false,
     };
 
     this.state = {
@@ -30,10 +32,17 @@ class Game extends React.Component {
       // Total amount of money earned
       totalMoneyEarned: 0,
       // Begin Shops
-      javaScriptShop: Object.assign(defaultShopProps, {
+      javaScriptShop: Object.assign(Object.assign({}, defaultShopProps), {
         key: 'javaScriptShop',
         name: 'JavaScript',
         numberOfShops: 1,
+        initial: true,
+      }),
+      rubyShop: Object.assign(Object.assign({}, defaultShopProps), {
+        key: 'rubyShop',
+        name: 'Ruby',
+        moneyEarnedWithClick: 5000,
+        baseBuyAmount: 6000,
       }),
       // End Shops
     };
@@ -68,7 +77,7 @@ class Game extends React.Component {
 
   devShopBuyAmount(shopKey) {
     let shopProps = this.state[shopKey];
-    if (shopProps.numberOfShops === 1) {
+    if ((shopProps.initial && shopProps.numberOfShops === 1) || shopProps.numberOfShops === 0) {
       return shopProps.baseBuyAmount;
     } else {
       return (shopProps.baseBuyAmount * ((shopProps.numberOfShops - 1) * shopProps.buyIncreaseModifier));
@@ -83,7 +92,7 @@ class Game extends React.Component {
     return '$' + this.centsToDollars(monetaryValue).toFixed(2);
   }
 
-  renderShop(shopProps, intial = false) {
+  renderShop(shopProps) {
     let buyAmount = this.formatMoney(this.devShopBuyAmount(shopProps.key));
     let moneyEarnedWithClick = this.formatMoney(shopProps.moneyEarnedWithClick * shopProps.numberOfShops);
 
@@ -107,7 +116,8 @@ class Game extends React.Component {
       <div className="Game">
         <h2>Earned {this.formatMoney(this.state.totalMoneyEarned)}</h2>
         <div className="DevShop-container">
-          {this.renderShop(this.state.javaScriptShop, true)}
+          {this.renderShop(this.state.javaScriptShop)}
+          {this.renderShop(this.state.rubyShop)}
         </div>
       </div>
     );
