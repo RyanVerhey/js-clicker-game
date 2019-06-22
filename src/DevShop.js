@@ -10,14 +10,14 @@ function DevShop(props) {
         className="DevShop-earn-button"
         onClick={props.onEarnClick}
       >
-        Earn ${props.moneyEarnedWithClick}! ({props.buyTime} seconds)
+        Earn {props.moneyEarnedWithClick}! ({props.buyTime} seconds)
       </button><br />
       <button
         className="DevShop-buy-button"
         onClick={props.onBuyClick}
         disabled={!props.canBuyNewShop}
       >
-        Buy another {props.name} Dev Shop for ${props.buyAmount}!
+        Buy another {props.name} Dev Shop for {props.buyAmount}!
       </button>
       <hr />
     </div>

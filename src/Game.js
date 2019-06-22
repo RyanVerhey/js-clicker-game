@@ -76,17 +76,24 @@ class Game extends React.Component {
   }
 
   centsToDollars(monetaryValue) {
-    return (monetaryValue / 100).toFixed(2)
+    return monetaryValue / 100;
+  }
+
+  formatMoney(monetaryValue) {
+    return '$' + this.centsToDollars(monetaryValue).toFixed(2);
   }
 
   renderShop(shopProps, intial = false) {
+    let buyAmount = this.formatMoney(this.devShopBuyAmount(shopProps.key));
+    let moneyEarnedWithClick = this.formatMoney(shopProps.moneyEarnedWithClick * shopProps.numberOfShops);
+
     return (
       <DevShop
         key={shopProps.key}
         name={shopProps.name}
         numberOfShops={shopProps.numberOfShops}
-        buyAmount={this.centsToDollars(this.devShopBuyAmount(shopProps.key))}
-        moneyEarnedWithClick={this.centsToDollars(shopProps.moneyEarnedWithClick * shopProps.numberOfShops)}
+        buyAmount={buyAmount}
+        moneyEarnedWithClick={moneyEarnedWithClick}
         buyTime={shopProps.buyTime / 1000}
         canBuyNewShop={this.canBuyNewShop(shopProps.key)}
         onEarnClick={() => this.handleEarnClick(shopProps.key)}
@@ -98,7 +105,7 @@ class Game extends React.Component {
   render() {
     return (
       <div className="Game">
-        <h2>Earned ${this.centsToDollars(this.state.totalMoneyEarned)}</h2>
+        <h2>Earned {this.formatMoney(this.state.totalMoneyEarned)}</h2>
         <div className="DevShop-container">
           {this.renderShop(this.state.javaScriptShop, true)}
         </div>
