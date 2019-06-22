@@ -6,7 +6,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
 
-    var defaultShopProps = {
+    let defaultShopProps = {
       // the key for updating state
       key: '',
       // The name
@@ -39,10 +39,9 @@ class Game extends React.Component {
   }
 
   handleEarnClick(shopKey) {
-    var shopProps = Object.assign({}, this.state[shopKey]);
-    var newState = {};
-    var currentMoneyEarned = this.state.moneyEarned;
-    var newMoneyEarned = currentMoneyEarned + (shopProps.moneyEarned * this.state.monetaryModifier);
+    let shopProps = Object.assign({}, this.state[shopKey]);
+    let currentMoneyEarned = this.state.moneyEarned;
+    let newMoneyEarned = currentMoneyEarned + ((shopProps.moneyEarned * shopProps.numberOfShops) * this.state.monetaryModifier);
     setTimeout(() => {
       this.setState({
         moneyEarned: newMoneyEarned
@@ -51,7 +50,11 @@ class Game extends React.Component {
   }
 
   handleBuyClick(shopKey) {
-    // TODO: Implement
+    let shopProps = Object.assign({}, this.state[shopKey]);
+    let newState = {};
+    shopProps.numberOfShops++;
+    newState[shopKey] = shopProps;
+    this.setState(newState);
   }
 
   renderShop(shopProps, intial = false) {
