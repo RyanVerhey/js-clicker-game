@@ -5,6 +5,7 @@ import DevShop from './DevShop';
 class Game extends React.Component {
   constructor(props) {
     super(props);
+
     var defaultShopProps = {
       // the key for updating state
       key: '',
@@ -21,18 +22,36 @@ class Game extends React.Component {
       // Cooldown timer in MS before buying abother shop
       buyTime: 500,
     };
+
     this.state = {
       // Modifier for
-      monetaryModifier: 1,
-      // All Shops
-      shops: {
-        javaScript: Object.assign(defaultShopProps, {
-          key: 'javaScript',
-          name: 'JavaScript',
-          numberOfShops: 1,
-        }),
-      },
+      monetaryModifier: 1.0,
+      // Total amount of money earned
+      moneyEarned: 0,
+      // Begin Shops
+      javaScriptShop: Object.assign(defaultShopProps, {
+        key: 'javaScriptShop',
+        name: 'JavaScript',
+        numberOfShops: 1,
+      }),
+      // End Shops
     };
+  }
+
+  handleEarnClick(shopKey) {
+    var shopProps = Object.assign({}, this.state[shopKey]);
+    var newState = {};
+    var currentMoneyEarned = this.state.moneyEarned;
+    var newMoneyEarned = currentMoneyEarned + (shopProps.moneyEarned * this.state.monetaryModifier);
+    setTimeout(() => {
+      this.setState({
+        moneyEarned: newMoneyEarned
+      })
+    }, shopProps.buyTime)
+  }
+
+  handleBuyClick(shopKey) {
+    // TODO: Implement
   }
 
   renderShop(shopProps, intial = false) {
@@ -45,6 +64,8 @@ class Game extends React.Component {
         buyAmount={shopProps.buyAmount}
         buyIncreaseModifier={shopProps.buyIncreaseModifier}
         buyTime={shopProps.buyTime}
+        onEarnClick={() => this.handleEarnClick(shopProps.key)}
+        onBuyClick={() => this.handleBuyClick(shopProps.key)}
       />
     );
   }
@@ -52,8 +73,9 @@ class Game extends React.Component {
   render() {
     return (
       <div className="Game">
+        <h2>Earned ${this.state.moneyEarned}</h2>
         <div className="DevShop-container">
-          {this.renderShop(this.state.shops.javaScript, true)}
+          {this.renderShop(this.state.javaScriptShop, true)}
         </div>
       </div>
     );
