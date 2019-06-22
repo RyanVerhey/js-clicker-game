@@ -16,7 +16,7 @@ class Game extends React.Component {
       // The money earned with each click
       moneyEarned: 1.0,
       // The amount needed to buy a new shop
-      buyAmount: 4.0,
+      baseBuyAmount: 4.0,
       // The modifier of how much the amount gos up to buy a new shop
       buyIncreaseModifier: 1.1,
       // Cooldown timer in MS before buying abother shop
@@ -39,22 +39,39 @@ class Game extends React.Component {
   }
 
   handleEarnClick(shopKey) {
-    let shopProps = Object.assign({}, this.state[shopKey]);
-    let currentMoneyEarned = this.state.moneyEarned;
-    let newMoneyEarned = currentMoneyEarned + ((shopProps.moneyEarned * shopProps.numberOfShops) * this.state.monetaryModifier);
     setTimeout(() => {
-      this.setState({
-        moneyEarned: newMoneyEarned
+      this.setState(prevState => {
+        let shopProps = Object.assign({}, prevState[shopKey]);
+        let currentMoneyEarned = this.state.moneyEarned;
+        let newMoneyEarned = currentMoneyEarned + ((shopProps.moneyEarned * shopProps.numberOfShops) * this.state.monetaryModifier);
+        return { moneyEarned: newMoneyEarned }
       })
-    }, shopProps.buyTime)
+    }, this.state[shopKey].buyTime)
   }
 
   handleBuyClick(shopKey) {
-    let shopProps = Object.assign({}, this.state[shopKey]);
-    let newState = {};
-    shopProps.numberOfShops++;
-    newState[shopKey] = shopProps;
-    this.setState(newState);
+    this.setState(prevState => {
+      let shopProps = Object.assign({}, prevState[shopKey]);
+      let newState = {};
+      let buyAmount = this.devShopBuyAmount(shopKey);
+      shopProps.numberOfShops++;
+      newState[shopKey] = shopProps;
+      newState['moneyEarned'] = this.state.moneyEarned - buyAmount
+      return newState;
+    });
+  }
+
+  canBuyNewShop(shopKey) {
+    return this.state.moneyEarned >= this.devShopBuyAmount(shopKey);
+  }
+
+  devShopBuyAmount(shopKey) {
+    let shopProps = this.state[shopKey];
+    if (shopProps.numberOfShops == 1) {
+      return shopProps.baseBuyAmount;
+    } else {
+      return (shopProps.baseBuyAmount * ((shopProps.numberOfShops - 1) * shopProps.buyIncreaseModifier));
+    }
   }
 
   renderShop(shopProps, intial = false) {
@@ -64,9 +81,10 @@ class Game extends React.Component {
         name={shopProps.name}
         numberOfShops={shopProps.numberOfShops}
         moneyEarned={shopProps.moneyEarned}
-        buyAmount={shopProps.buyAmount}
+        buyAmount={this.devShopBuyAmount(shopProps.key)}
         buyIncreaseModifier={shopProps.buyIncreaseModifier}
         buyTime={shopProps.buyTime}
+        canBuyNewShop={this.canBuyNewShop(shopProps.key)}
         onEarnClick={() => this.handleEarnClick(shopProps.key)}
         onBuyClick={() => this.handleBuyClick(shopProps.key)}
       />

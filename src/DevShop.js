@@ -15,8 +15,9 @@ function DevShop(props) {
       <button
         className="DevShop-buy-button"
         onClick={props.onBuyClick}
+        disabled={!props.canBuyNewShop}
       >
-        Buy another {props.name} Dev Shop!
+        Buy another {props.name} Dev Shop for ${props.buyAmount}!
       </button>
       <hr />
     </div>
