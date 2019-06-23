@@ -17,7 +17,7 @@ class Game extends React.Component {
       // The money earned with each click
       moneyEarnedWithClick: 100,
       // The amount needed to buy a new shop
-      baseBuyAmount: 400,
+      baseBuyAmount: 363.63,
       // The modifier of how much the amount gos up to buy a new shop
       buyIncreaseModifier: 1.1,
       // Cooldown timer in MS before buying abother shop
@@ -91,10 +91,10 @@ class Game extends React.Component {
 
   devShopBuyAmount(shopKey) {
     let shopProps = this.state[shopKey];
-    if ((shopProps.initial && shopProps.numberOfShops === 1) || shopProps.numberOfShops === 0) {
-      return shopProps.baseBuyAmount;
+    if (shopProps.numberOfShops == 0) {
+      return shopProps.baseBuyAmount
     } else {
-      return (shopProps.baseBuyAmount * ((shopProps.numberOfShops - 1) * shopProps.buyIncreaseModifier));
+      return (shopProps.baseBuyAmount * ((shopProps.numberOfShops) * shopProps.buyIncreaseModifier))
     }
   }
 
