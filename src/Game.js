@@ -24,6 +24,8 @@ class Game extends React.Component {
       buyTime: 500,
       // Determines if it's the initial shop
       initial: false,
+      // Disables the earn button for cooldown
+      earnButtonDisabled: false
     };
 
     this.state = {
@@ -43,18 +45,30 @@ class Game extends React.Component {
         name: 'Ruby',
         moneyEarnedWithClick: 5000,
         baseBuyAmount: 6000,
+        buyIncreaseModifier: 1.3,
+        buyTime: 1000,
       }),
       // End Shops
     };
   }
 
   handleEarnClick(shopKey) {
+    this.setState(prevState => {
+      let shopProps = Object.assign({}, prevState[shopKey]);
+      let newState = {};
+      shopProps.earnButtonDisabled = true;
+      newState[shopKey] = shopProps;
+      return newState;
+    });
+
     setTimeout(() => {
       this.setState(prevState => {
         let shopProps = Object.assign({}, prevState[shopKey]);
-        return ({
-          totalMoneyEarned: prevState.totalMoneyEarned + ((shopProps.moneyEarnedWithClick * shopProps.numberOfShops) * this.state.monetaryModifier)
-        });
+        let newState = {};
+        shopProps.earnButtonDisabled = false;
+        newState[shopKey] = shopProps;
+        newState['totalMoneyEarned'] = prevState.totalMoneyEarned + ((shopProps.moneyEarnedWithClick * shopProps.numberOfShops) * this.state.monetaryModifier);
+        return newState;
       })
     }, this.state[shopKey].buyTime)
   }
@@ -104,6 +118,7 @@ class Game extends React.Component {
         buyAmount={buyAmount}
         moneyEarnedWithClick={moneyEarnedWithClick}
         buyTime={shopProps.buyTime / 1000}
+        earnButtonDisabled={shopProps.earnButtonDisabled}
         canBuyNewShop={this.canBuyNewShop(shopProps.key)}
         onEarnClick={() => this.handleEarnClick(shopProps.key)}
         onBuyClick={() => this.handleBuyClick(shopProps.key)}
