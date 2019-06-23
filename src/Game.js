@@ -5,9 +5,36 @@ import DevShop from './DevShop';
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    const startingAmount = 500
 
-    // All monetary values in cents
-    let defaultShopProps = {
+    this.state = {
+      // Modifier for
+      monetaryModifier: 1.0,
+      // Total amount of money earned
+      totalMoneyEarned: startingAmount,
+      // Begin Shops
+      javaScriptShop: this.setUpShop({
+        key: 'javaScriptShop',
+        name: 'JavaScript',
+        moneyEarnedWithClick: 100,
+        baseBuyAmount: startingAmount,
+        buyIncreaseModifier: 0.1,
+        buyTime: 500,
+      }),
+      rubyShop: this.setUpShop({
+        key: 'rubyShop',
+        name: 'Ruby',
+        moneyEarnedWithClick: 5000,
+        baseBuyAmount: 6000,
+        buyIncreaseModifier: 0.3,
+        buyTime: 1000,
+      }),
+      // End Shops
+    };
+  }
+
+  setUpShop(props) {
+    return (Object.assign({
       // the key for updating state
       key: '',
       // The name
@@ -15,41 +42,16 @@ class Game extends React.Component {
       // The amount of shops
       numberOfShops: 0,
       // The money earned with each click
-      moneyEarnedWithClick: 100,
+      moneyEarnedWithClick: 0,
       // The amount needed to buy a new shop
-      baseBuyAmount: 363.63,
+      baseBuyAmount: 0,
       // The modifier of how much the amount gos up to buy a new shop
-      buyIncreaseModifier: 1.1,
+      buyIncreaseModifier: 0.0,
       // Cooldown timer in MS before buying abother shop
-      buyTime: 500,
-      // Determines if it's the initial shop
-      initial: false,
+      buyTime: 0,
       // Disables the earn button for cooldown
-      earnButtonDisabled: false
-    };
-
-    this.state = {
-      // Modifier for
-      monetaryModifier: 1.0,
-      // Total amount of money earned
-      totalMoneyEarned: 0,
-      // Begin Shops
-      javaScriptShop: Object.assign(Object.assign({}, defaultShopProps), {
-        key: 'javaScriptShop',
-        name: 'JavaScript',
-        numberOfShops: 1,
-        initial: true,
-      }),
-      rubyShop: Object.assign(Object.assign({}, defaultShopProps), {
-        key: 'rubyShop',
-        name: 'Ruby',
-        moneyEarnedWithClick: 5000,
-        baseBuyAmount: 6000,
-        buyIncreaseModifier: 1.3,
-        buyTime: 1000,
-      }),
-      // End Shops
-    };
+      earnButtonDisabled: false,
+    }, props))
   }
 
   handleEarnClick(shopKey) {
